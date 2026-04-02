@@ -73,3 +73,21 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+# IDE 관련 (VS Code, Rider, Android Studio)
+.vscode/
+.idea/
+*.sln
+*.csproj
+*.unityproj
+
+# OS 쓰레기 파일
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Unity 추가 캐시 및 로그
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+/[Aa]ssets/[Ss]treamingAssets/aa/*
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
