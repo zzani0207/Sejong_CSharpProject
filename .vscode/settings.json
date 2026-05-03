@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "Sejong_C_Programming.slnx"
+    "dotnet.defaultSolution": "Sejong_CSharpProject.slnx"
 }
