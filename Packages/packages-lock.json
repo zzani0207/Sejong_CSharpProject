@@ -247,6 +247,15 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.zzani.uianimation": {
+      "version": "https://github.com/zzani0207/ZZaniUIAnimation.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.kyrylokuzyk.primetween": "4.8.0"
+      },
+      "hash": "fc57abf71a6d4d98143ea66df08d76f8458b07aa"
+    },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
       "depth": 0,
