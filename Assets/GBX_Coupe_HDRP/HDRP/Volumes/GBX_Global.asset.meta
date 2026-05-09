@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7f342610b85f4164f808a1f380dcc668
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 185778
+  packageName: HDRP GBX COUPE Free Update
+  packageVersion: 2.0
+  assetPath: Assets/GBX_Coupe_HDRP/HDRP/Volumes/GBX_Global.asset
+  uploadId: 645917

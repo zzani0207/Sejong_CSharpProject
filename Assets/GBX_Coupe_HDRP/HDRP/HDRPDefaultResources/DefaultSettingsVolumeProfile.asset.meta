@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d87f7d7815073e840834a16a518c1237
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 185778
+  packageName: HDRP GBX COUPE Free Update
+  packageVersion: 2.0
+  assetPath: Assets/GBX_Coupe_HDRP/HDRP/HDRPDefaultResources/DefaultSettingsVolumeProfile.asset
+  uploadId: 645917

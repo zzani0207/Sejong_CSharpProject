@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c7bda953e42626d4da0a5770152c764f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 185778
+  packageName: HDRP GBX COUPE Free Update
+  packageVersion: 2.0
+  assetPath: Assets/GBX_Coupe_HDRP/Settings/QualityLevels/1HDRPLowQuality.asset
+  uploadId: 645917
