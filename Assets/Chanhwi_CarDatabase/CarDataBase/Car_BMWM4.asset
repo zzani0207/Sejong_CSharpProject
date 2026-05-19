@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7daeb56ffeda4b40bf2899ed379968b, type: 3}
+  m_Name: Car_BMWM4
+  m_EditorClassIdentifier: Assembly-CSharp::CarData
+  carName: BMW M4
+  manufacturer: BMW
+  model: M4
+  productionYear: 2024
+  vinNumber: WBSF93010WEJ12345
+  fuelType: 1
+  enginePower: 503
+  maxSpeed: 290
+  acceleration: 3.9
+  torque: 650
+  fuelTankCapacity: 70
+  currentFuelLevel: 60
+  fuelConsumption: 9.5
+  remainingFuelRange: 570
+  batteryCapacity: 0
+  currentBatteryHealth: 100
+  currentChargeLevel: 0
+  remainingBatteryRange: 0
+  chargingTime: 0
+  energyConsumption: 0
+  mileage: 0
+  weight: 2000
+  color: Silver
+  seatingCapacity: 5

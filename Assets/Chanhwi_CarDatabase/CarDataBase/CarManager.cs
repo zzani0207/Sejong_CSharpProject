@@ -34,10 +34,13 @@ public class CarManager : MonoBehaviour
     {
         get
         {
-            if (instance == null)
+#if UNITY_EDITOR
+            // 에디터(에디트 모드) - 씬에서 직접 찾기
+            if (instance == null && !Application.isPlaying)
             {
-                Debug.LogError("CarManager instance not found!");
+                instance = FindAnyObjectByType<CarManager>();
             }
+#endif
             return instance;
         }
     }
