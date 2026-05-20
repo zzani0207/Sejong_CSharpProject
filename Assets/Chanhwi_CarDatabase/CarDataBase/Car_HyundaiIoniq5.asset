@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7daeb56ffeda4b40bf2899ed379968b, type: 3}
+  m_Name: Car_HyundaiIoniq5
+  m_EditorClassIdentifier: Assembly-CSharp::CarData
+  carName: Hyundai Ioniq 5
+  manufacturer: Hyundai
+  model: Ioniq 5
+  productionYear: 2024
+  vinNumber: KMHEC4A46EU123456
+  fuelType: 0
+  enginePower: 225
+  maxSpeed: 230
+  acceleration: 4.7
+  torque: 350
+  fuelTankCapacity: 60
+  currentFuelLevel: 45
+  fuelConsumption: 6.5
+  remainingFuelRange: 300
+  batteryCapacity: 84
+  currentBatteryHealth: 98
+  currentChargeLevel: 75
+  remainingBatteryRange: 380
+  chargingTime: 6.8
+  energyConsumption: 13.5
+  mileage: 0
+  weight: 2000
+  color: Silver
+  seatingCapacity: 5

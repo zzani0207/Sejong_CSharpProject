@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7daeb56ffeda4b40bf2899ed379968b, type: 3}
+  m_Name: Car_BMWX5
+  m_EditorClassIdentifier: Assembly-CSharp::CarData
+  carName: BMW X5
+  manufacturer: BMW
+  model: X5
+  productionYear: 2024
+  vinNumber: WBAFD41051G123456
+  fuelType: 2
+  enginePower: 265
+  maxSpeed: 250
+  acceleration: 5.5
+  torque: 620
+  fuelTankCapacity: 85
+  currentFuelLevel: 75
+  fuelConsumption: 12.3
+  remainingFuelRange: 921
+  batteryCapacity: 0
+  currentBatteryHealth: 100
+  currentChargeLevel: 0
+  remainingBatteryRange: 0
+  chargingTime: 0
+  energyConsumption: 0
+  mileage: 0
+  weight: 2000
+  color: Silver
+  seatingCapacity: 5
