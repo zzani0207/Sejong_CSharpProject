@@ -47,6 +47,56 @@ public class DataAdjustmentPanel : MonoBehaviour
             }
             #endif
         }
+
+        EnsureLayoutComponents();
+    }
+
+    /// <summary>
+    /// Panel 본체와 ItemContainer에 필요한 레이아웃 컴포넌트 자동 보강
+    /// (슬라이더가 안 보이는 가장 흔한 원인 - LayoutGroup/ContentSizeFitter 누락)
+    /// </summary>
+    private void EnsureLayoutComponents()
+    {
+        // Panel 본체: VerticalLayoutGroup + ContentSizeFitter (Title + ItemContainer 세로 정렬)
+        var panelVlg = GetComponent<VerticalLayoutGroup>();
+        if (panelVlg == null) panelVlg = gameObject.AddComponent<VerticalLayoutGroup>();
+        panelVlg.childForceExpandWidth = true;
+        panelVlg.childForceExpandHeight = false;
+        panelVlg.childControlWidth = true;
+        panelVlg.childControlHeight = true;
+        panelVlg.spacing = 4;
+        if (panelVlg.padding.left == 0 && panelVlg.padding.right == 0)
+            panelVlg.padding = new RectOffset(10, 10, 8, 8);
+
+        var panelCsf = GetComponent<ContentSizeFitter>();
+        if (panelCsf == null) panelCsf = gameObject.AddComponent<ContentSizeFitter>();
+        panelCsf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        panelCsf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+
+        // ItemContainer: VerticalLayoutGroup + ContentSizeFitter (아이템들 세로 정렬)
+        if (itemContainer == null) return;
+        var ig = itemContainer.gameObject;
+        var itemVlg = ig.GetComponent<VerticalLayoutGroup>();
+        if (itemVlg == null) itemVlg = ig.AddComponent<VerticalLayoutGroup>();
+        itemVlg.childForceExpandWidth = true;
+        itemVlg.childForceExpandHeight = false;
+        itemVlg.childControlWidth = true;
+        itemVlg.childControlHeight = false;
+        itemVlg.spacing = 4;
+        containerLayout = itemVlg;
+
+        var itemCsf = ig.GetComponent<ContentSizeFitter>();
+        if (itemCsf == null) itemCsf = ig.AddComponent<ContentSizeFitter>();
+        itemCsf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        itemCsf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+    }
+
+    /// <summary>
+    /// 외부(SidebarUIManager)에서 itemPrefab 주입
+    /// </summary>
+    public void SetItemPrefab(GameObject prefab)
+    {
+        itemPrefab = prefab;
     }
 
     /// <summary>

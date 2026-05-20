@@ -95,9 +95,9 @@ public class CarUIController : MonoBehaviour
     private void UpdateBasicInfo(CarData car)
     {
         if (carNameText != null) carNameText.text = car.CarName;
-        if (manufacturerText != null) manufacturerText.text = $"제조사: {car.Manufacturer}";
-        if (modelText != null) modelText.text = $"모델: {car.Model}";
-        if (productionYearText != null) productionYearText.text = $"출시년도: {car.ProductionYear}";
+        if (manufacturerText != null) manufacturerText.text = $"Manufacturer: {car.Manufacturer}";
+        if (modelText != null) modelText.text = $"Model: {car.Model}";
+        if (productionYearText != null) productionYearText.text = $"Year: {car.ProductionYear}";
         if (vinText != null) vinText.text = $"VIN: {car.VinNumber}";
     }
 
@@ -106,10 +106,10 @@ public class CarUIController : MonoBehaviour
     /// </summary>
     private void UpdatePerformanceInfo(CarData car)
     {
-        if (enginePowerText != null) enginePowerText.text = $"엔진: {car.EnginePower}kW";
-        if (maxSpeedText != null) maxSpeedText.text = $"최대속도: {car.MaxSpeed}km/h";
-        if (accelerationText != null) accelerationText.text = $"가속: 0-100km/h {car.Acceleration}초";
-        if (torqueText != null) torqueText.text = $"토크: {car.Torque}N·m";
+        if (enginePowerText != null) enginePowerText.text = $"Engine: {car.EnginePower}kW";
+        if (maxSpeedText != null) maxSpeedText.text = $"Max Speed: {car.MaxSpeed}km/h";
+        if (accelerationText != null) accelerationText.text = $"0-100km/h: {car.Acceleration}s";
+        if (torqueText != null) torqueText.text = $"Torque: {car.Torque}N.m";
     }
 
     /// <summary>
@@ -120,12 +120,12 @@ public class CarUIController : MonoBehaviour
         // 배터리 정보가 있는 차만 표시
         if (car.FuelType == FuelType.Electric || car.FuelType == FuelType.Hybrid || car.FuelType == FuelType.PHEV)
         {
-            if (batteryCapacityText != null) batteryCapacityText.text = $"용량: {car.BatteryCapacity}kWh";
-            if (batteryHealthText != null) batteryHealthText.text = $"건강도: {car.CurrentBatteryHealth:F1}%";
+            if (batteryCapacityText != null) batteryCapacityText.text = $"Capacity: {car.BatteryCapacity}kWh";
+            if (batteryHealthText != null) batteryHealthText.text = $"Health: {car.CurrentBatteryHealth:F1}%";
             if (chargePercentText != null) chargePercentText.text = $"{car.CurrentChargeLevel:F1}%";
             if (batterySlider != null) batterySlider.value = car.CurrentChargeLevel / 100f;
-            if (remainingRangeText != null) remainingRangeText.text = $"배터리 남은거리: {car.RemainingBatteryRange:F0}km";
-            if (chargingTimeText != null) chargingTimeText.text = $"충전시간: {car.ChargingTime:F1}시간";
+            if (remainingRangeText != null) remainingRangeText.text = $"Battery Range: {car.RemainingBatteryRange:F0}km";
+            if (chargingTimeText != null) chargingTimeText.text = $"Charging Time: {car.ChargingTime:F1}h";
         }
         else
         {
@@ -143,14 +143,14 @@ public class CarUIController : MonoBehaviour
     /// </summary>
     private void UpdateFuelInfo(CarData car)
     {
-        if (fuelTypeText != null) fuelTypeText.text = $"연료: {car.FuelTypeString}";
+        if (fuelTypeText != null) fuelTypeText.text = $"Fuel: {car.FuelTypeString}";
 
         // 연료 정보가 있는 차만 표시
-        if (car.FuelType == FuelType.Gasoline || car.FuelType == FuelType.Diesel || 
+        if (car.FuelType == FuelType.Gasoline || car.FuelType == FuelType.Diesel ||
             car.FuelType == FuelType.Hybrid || car.FuelType == FuelType.PHEV)
         {
             if (fuelLevelText != null) fuelLevelText.text = $"{car.CurrentFuelLevel:F1}L / {car.FuelTankCapacity}L";
-            if (fuelConsumptionText != null) fuelConsumptionText.text = $"연비: {car.FuelConsumption}km/L";
+            if (fuelConsumptionText != null) fuelConsumptionText.text = $"Fuel Efficiency: {car.FuelConsumption}km/L";
             if (fuelSlider != null) fuelSlider.value = car.CurrentFuelLevel / car.FuelTankCapacity;
         }
         else
@@ -188,10 +188,10 @@ public class CarUIController : MonoBehaviour
     /// </summary>
     private void UpdateVehicleStatus(CarData car)
     {
-        if (mileageText != null) mileageText.text = $"주행거리: {car.Mileage:F0}km";
-        if (weightText != null) weightText.text = $"무게: {car.Weight}kg";
-        if (colorText != null) colorText.text = $"색상: {car.Color}";
-        if (seatingCapacityText != null) seatingCapacityText.text = $"탑승인원: {car.SeatingCapacity}명";
+        if (mileageText != null) mileageText.text = $"Mileage: {car.Mileage:F0}km";
+        if (weightText != null) weightText.text = $"Weight: {car.Weight}kg";
+        if (colorText != null) colorText.text = $"Color: {car.Color}";
+        if (seatingCapacityText != null) seatingCapacityText.text = $"Seats: {car.SeatingCapacity}";
     }
 
     /// <summary>
@@ -199,7 +199,7 @@ public class CarUIController : MonoBehaviour
     /// </summary>
     private void UpdateMileageUI(float mileage)
     {
-        if (mileageText != null) mileageText.text = $"주행거리: {mileage:F0}km";
+        if (mileageText != null) mileageText.text = $"Mileage: {mileage:F0}km";
     }
 
     /// <summary>
@@ -207,7 +207,7 @@ public class CarUIController : MonoBehaviour
     /// </summary>
     private void UpdateEfficiencyInfo(CarData car)
     {
-        if (energyConsumptionText != null) energyConsumptionText.text = $"에너지 소비: {car.EnergyConsumption}kWh/100km";
+        if (energyConsumptionText != null) energyConsumptionText.text = $"Energy Use: {car.EnergyConsumption}kWh/100km";
     }
 
     /// <summary>

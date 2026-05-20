@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Sirenix.OdinInspector;
-using System.Collections;
+using PrimeTween;
 
 /// <summary>
 /// 사이드바 UI 전반 제어
-/// - 가로 너비 토글 (얇음 ↔ 펼침)
+/// - 가로 너비 토글 (얇음 ↔ 펼침) + 컨텐츠 fade in/out
+/// - PrimeTween + AnimationCurve(베지어 편집 가능)
 /// - CanvasGroup으로 표시/숨김
 /// </summary>
 [RequireComponent(typeof(RectTransform))]
@@ -41,8 +42,18 @@ public class CustomUI : MonoBehaviour
 
     [FoldoutGroup("토글 설정")]
     [SerializeField]
+    [Tooltip("애니메이션 이징 (PrimeTween 내장 - InOutCubic, OutBack, OutElastic 등)")]
+    private Ease ease = Ease.OutCubic;
+
+    [FoldoutGroup("토글 설정")]
+    [SerializeField]
     [Tooltip("시작 시 확장 상태")]
     private bool startExpanded = false;
+
+    [FoldoutGroup("토글 설정")]
+    [SerializeField]
+    [Tooltip("축소 상태에서 숨길 컨텐츠 (보통 PanelContainer)")]
+    private GameObject contentToHideOnCollapse;
 
     [FoldoutGroup("UI 표시")]
     [SerializeField]
@@ -55,7 +66,7 @@ public class CustomUI : MonoBehaviour
     private bool startVisible = true;
 
     private bool isExpanded;
-    private Coroutine animCoroutine;
+    private CanvasGroup contentCanvasGroup;
 
     public bool IsExpanded => isExpanded;
 
@@ -63,6 +74,39 @@ public class CustomUI : MonoBehaviour
     {
         if (sidebarRect == null)
             sidebarRect = GetComponent<RectTransform>();
+
+        if (contentToHideOnCollapse != null)
+        {
+            contentCanvasGroup = contentToHideOnCollapse.GetComponent<CanvasGroup>();
+            if (contentCanvasGroup == null)
+                contentCanvasGroup = contentToHideOnCollapse.AddComponent<CanvasGroup>();
+        }
+
+        // 토글 버튼이 사이드바 폭에 stretched되지 않도록 anchor 고정
+        NormalizeToggleButtonAnchor();
+    }
+
+    /// <summary>
+    /// 토글 버튼이 사이드바와 함께 늘어나지 않도록 anchor를 고정으로 정규화
+    /// </summary>
+    private void NormalizeToggleButtonAnchor()
+    {
+        if (toggleButton == null) return;
+        var rt = toggleButton.transform as RectTransform;
+        if (rt == null) return;
+
+        // anchor가 가로로 stretched 상태면 현재 화면상 크기를 보존하면서 좌상단 고정으로 변경
+        bool stretchedX = Mathf.Abs(rt.anchorMax.x - rt.anchorMin.x) > 0.01f;
+        if (stretchedX)
+        {
+            Vector2 size = rt.rect.size;
+            Vector3 worldPos = rt.position;
+            rt.anchorMin = new Vector2(0f, 1f);
+            rt.anchorMax = new Vector2(0f, 1f);
+            rt.pivot = new Vector2(0f, 1f);
+            rt.sizeDelta = size;
+            rt.position = worldPos;
+        }
     }
 
     private void Start()
@@ -78,6 +122,11 @@ public class CustomUI : MonoBehaviour
 
         isExpanded = startExpanded;
         SetWidthImmediate(isExpanded ? expandedWidth : collapsedWidth);
+        if (contentToHideOnCollapse != null)
+        {
+            contentToHideOnCollapse.SetActive(isExpanded);
+            if (contentCanvasGroup != null) contentCanvasGroup.alpha = isExpanded ? 1f : 0f;
+        }
 
         if (toggleButton != null)
             toggleButton.onClick.AddListener(ToggleExpanded);
@@ -89,9 +138,6 @@ public class CustomUI : MonoBehaviour
             toggleButton.onClick.RemoveListener(ToggleExpanded);
     }
 
-    /// <summary>
-    /// 사이드바 확장/축소 토글
-    /// </summary>
     [FoldoutGroup("토글 설정")]
     [Button("토글 테스트", ButtonSizes.Medium)]
     public void ToggleExpanded()
@@ -104,14 +150,48 @@ public class CustomUI : MonoBehaviour
         isExpanded = expanded;
         float target = expanded ? expandedWidth : collapsedWidth;
 
+        // 에디터/즉시 전환
         if (!Application.isPlaying || animationDuration <= 0f)
         {
             SetWidthImmediate(target);
+            if (contentToHideOnCollapse != null)
+            {
+                contentToHideOnCollapse.SetActive(expanded);
+                if (contentCanvasGroup != null) contentCanvasGroup.alpha = expanded ? 1f : 0f;
+            }
             return;
         }
 
-        if (animCoroutine != null) StopCoroutine(animCoroutine);
-        animCoroutine = StartCoroutine(AnimateWidth(target));
+        // 이전 트윈 중단
+        Tween.StopAll(onTarget: sidebarRect);
+        if (contentCanvasGroup != null) Tween.StopAll(onTarget: contentCanvasGroup);
+
+        // 확장 시작: 컨텐츠 즉시 활성화 (페이드 인 준비)
+        if (expanded && contentToHideOnCollapse != null)
+        {
+            contentToHideOnCollapse.SetActive(true);
+        }
+
+        // 폭 트윈 - PrimeTween Ease 사용
+        float startWidth = sidebarRect.sizeDelta.x;
+        Tween.Custom(startWidth, target, animationDuration, val =>
+        {
+            var size = sidebarRect.sizeDelta;
+            size.x = val;
+            sidebarRect.sizeDelta = size;
+        }, ease);
+
+        // 컨텐츠 알파 페이드
+        if (contentCanvasGroup != null)
+        {
+            float endAlpha = expanded ? 1f : 0f;
+            Tween.Alpha(contentCanvasGroup, endAlpha, animationDuration, ease)
+                .OnComplete(() =>
+                {
+                    if (!expanded && contentToHideOnCollapse != null)
+                        contentToHideOnCollapse.SetActive(false);
+                });
+        }
     }
 
     private void SetWidthImmediate(float width)
@@ -120,21 +200,6 @@ public class CustomUI : MonoBehaviour
         var size = sidebarRect.sizeDelta;
         size.x = width;
         sidebarRect.sizeDelta = size;
-    }
-
-    private IEnumerator AnimateWidth(float targetWidth)
-    {
-        float startWidth = sidebarRect.sizeDelta.x;
-        float elapsed = 0f;
-        while (elapsed < animationDuration)
-        {
-            elapsed += Time.unscaledDeltaTime;
-            float t = Mathf.SmoothStep(0f, 1f, elapsed / animationDuration);
-            SetWidthImmediate(Mathf.Lerp(startWidth, targetWidth, t));
-            yield return null;
-        }
-        SetWidthImmediate(targetWidth);
-        animCoroutine = null;
     }
 
     /// <summary>

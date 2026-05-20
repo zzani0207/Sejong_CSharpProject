@@ -40,6 +40,11 @@ public class SidebarUISetup : MonoBehaviour
     [Tooltip("DataAdjustmentPanel 프리팹을 할당하세요")]
     private GameObject panelPrefab;
 
+    [FoldoutGroup("프리팹")]
+    [SerializeField]
+    [Tooltip("DataAdjustmentUIItem 프리팹을 할당하세요")]
+    private GameObject itemPrefab;
+
     [FoldoutGroup("레이아웃")]
     [SerializeField]
     [Tooltip("패널들을 배치할 컨테이너 (PanelContainer)")]
@@ -98,6 +103,12 @@ public class SidebarUISetup : MonoBehaviour
             return;
         }
 
+        if (itemPrefab == null)
+        {
+            EditorUtility.DisplayDialog("오류", "Item Prefab을 할당하세요!", "확인");
+            return;
+        }
+
         if (panelContainer == null)
         {
             EditorUtility.DisplayDialog("오류", "Panel Container를 할당하세요!", "확인");
@@ -109,6 +120,7 @@ public class SidebarUISetup : MonoBehaviour
 
         // 프리팹 및 컨테이너 할당
         sidebarManager.SetPanelPrefab(panelPrefab);
+        sidebarManager.SetItemPrefab(itemPrefab);
         sidebarManager.SetPanelContainer(panelContainer);
 
         // PanelContainer 레이아웃 자동 설정

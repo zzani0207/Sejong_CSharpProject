@@ -24,6 +24,9 @@ public class SidebarUIManager : MonoBehaviour
     [Tooltip("DataAdjustmentPanel 프리팹")]
     private GameObject panelPrefab;
 
+    [FoldoutGroup("프리팹")]
+    [SerializeField]
+    [Tooltip("DataAdjustmentUIItem 프리팹 (각 패널에 주입)")]
     private GameObject itemPrefab;
 
     private class PanelInfo
@@ -104,6 +107,14 @@ public class SidebarUIManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Item 프리팹 설정 (런타임에 각 패널에 주입됨)
+    /// </summary>
+    public void SetItemPrefab(GameObject item)
+    {
+        itemPrefab = item;
+    }
+
+    /// <summary>
     /// 패널 컨테이너 설정 (SidebarUISetup에서 호출)
     /// </summary>
     public void SetPanelContainer(Transform container)
@@ -149,6 +160,10 @@ public class SidebarUIManager : MonoBehaviour
         }
         panelObj.name = $"Panel_{categoryName}";
 
+        // itemPrefab 주입 (런타임에 패널의 #if UNITY_EDITOR 자동검색이 작동 안 하므로 필수)
+        if (itemPrefab != null)
+            newPanel.SetItemPrefab(itemPrefab);
+
         // 데이터 필드 가져오기
         var dataFields = provider.GetDataFieldsByCategory(categoryName);
         newPanel.Initialize(panelTitle, dataFields);
@@ -175,6 +190,7 @@ public class SidebarUIManager : MonoBehaviour
 
     /// <summary>
     /// 모든 패널 제거
+    /// (activePanels 추적 외에 panelContainer의 모든 자식도 정리 - 씬 재로드 후 잔여 패널 대응)
     /// </summary>
     public void ClearAllPanels()
     {
@@ -183,6 +199,17 @@ public class SidebarUIManager : MonoBehaviour
             SafeDestroy(info.panel.gameObject);
         }
         activePanels.Clear();
+
+        // panelContainer에 남아있는 잔여 패널 자식 모두 제거
+        if (panelContainer != null)
+        {
+            for (int i = panelContainer.childCount - 1; i >= 0; i--)
+            {
+                var child = panelContainer.GetChild(i);
+                if (child.name.StartsWith("Panel_"))
+                    SafeDestroy(child.gameObject);
+            }
+        }
     }
 
     /// <summary>

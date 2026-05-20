@@ -32,7 +32,10 @@ public class UIComponentCreator
         labelObj.transform.SetParent(itemRoot.transform);
         TextMeshProUGUI labelText = labelObj.AddComponent<TextMeshProUGUI>();
         labelText.text = "Label";
-        labelText.fontSize = 3;
+        labelText.fontSize = 18;
+        labelText.enableAutoSizing = true;
+        labelText.fontSizeMin = 10;
+        labelText.fontSizeMax = 24;
         RectTransform labelRect = labelObj.GetComponent<RectTransform>();
         labelRect.sizeDelta = new Vector2(100, 60);
         LayoutElement labelLayout = labelObj.AddComponent<LayoutElement>();
@@ -76,7 +79,11 @@ public class UIComponentCreator
         valueObj.transform.SetParent(itemRoot.transform);
         TextMeshProUGUI valueText = valueObj.AddComponent<TextMeshProUGUI>();
         valueText.text = "100.0";
-        valueText.fontSize = 3;
+        valueText.fontSize = 18;
+        valueText.enableAutoSizing = true;
+        valueText.fontSizeMin = 10;
+        valueText.fontSizeMax = 24;
+        valueText.alignment = TextAlignmentOptions.Right;
         RectTransform valueRect = valueObj.GetComponent<RectTransform>();
         valueRect.sizeDelta = new Vector2(60, 60);
         LayoutElement valueLayout = valueObj.AddComponent<LayoutElement>();
@@ -116,7 +123,12 @@ public class UIComponentCreator
         titleObj.transform.SetParent(panelRoot.transform);
         TextMeshProUGUI titleText = titleObj.AddComponent<TextMeshProUGUI>();
         titleText.text = "Panel Title";
-        titleText.fontSize = 4;
+        titleText.fontSize = 24;
+        titleText.fontStyle = FontStyles.Bold;
+        titleText.alignment = TextAlignmentOptions.Center;
+        titleText.enableAutoSizing = true;
+        titleText.fontSizeMin = 14;
+        titleText.fontSizeMax = 32;
         RectTransform titleRect = titleObj.GetComponent<RectTransform>();
         titleRect.sizeDelta = new Vector2(300, 40);
         LayoutElement titleLayout = titleObj.AddComponent<LayoutElement>();

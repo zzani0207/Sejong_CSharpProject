@@ -56,6 +56,12 @@ public class DataAdjustmentUIItem : MonoBehaviour
         if (field == null) return;
 
         dataField = field;
+
+        // LayoutElement 자동 보강 - 아이템 높이가 0이면 슬라이더가 보이지 않음
+        if (!TryGetComponent<LayoutElement>(out var le))
+            le = gameObject.AddComponent<LayoutElement>();
+        if (le.preferredHeight < 1f) le.preferredHeight = 36f;
+        if (le.minHeight < 1f) le.minHeight = 28f;
         
         // UI 업데이트
         if (labelText != null)
