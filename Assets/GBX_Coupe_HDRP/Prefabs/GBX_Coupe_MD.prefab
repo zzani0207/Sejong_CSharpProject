@@ -2352,6 +2352,7 @@ GameObject:
   - component: {fileID: 2826719930453170645}
   - component: {fileID: 6512627770800120803}
   - component: {fileID: 674705520210829082}
+  - component: {fileID: 8516871430310532712}
   m_Layer: 0
   m_Name: Shadow (2)
   m_TagString: Untagged
@@ -2367,13 +2368,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1252527449346632646}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 1, w: 0}
+  m_LocalRotation: {x: -0.0010823122, y: 0.0007046615, z: 0.9999897, w: 0.0043662195}
   m_LocalPosition: {x: 0, y: 0.02, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1869101567296985507}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: -0.081, y: -0.124, z: 179.5}
 --- !u!33 &6512627770800120803
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2431,6 +2432,18 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8516871430310532712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252527449346632646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a7660c4127e7264c946f4aab0b21532, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarDoorManager
 --- !u!1 &1267475575655513205
 GameObject:
   m_ObjectHideFlags: 0
@@ -4673,6 +4686,7 @@ Transform:
   - {fileID: 5084923951529080810}
   - {fileID: 2826719930453170645}
   - {fileID: 6373610545490685916}
+  - {fileID: 2985067111493763757}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2011905989175535602
@@ -7033,7 +7047,7 @@ Light:
   m_Intensity: 1.5915494
   m_Range: 0.5
   m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
+  m_InnerSpotAngle: 0
   m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 0
@@ -7071,7 +7085,7 @@ Light:
   m_RenderingLayerMask: 1
   m_Lightmapping: 1
   m_LightShadowCasterMode: 2
-  m_AreaSize: {x: 1, y: 1}
+  m_AreaSize: {x: 0.5, y: 0.5}
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
@@ -7081,9 +7095,9 @@ Light:
   m_ForceVisible: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
-  m_LightUnit: 1
+  m_LightUnit: 0
   m_LuxAtDistance: 1
-  m_EnableSpotReflector: 1
+  m_EnableSpotReflector: 0
 --- !u!114 &3860909702541215270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7103,9 +7117,9 @@ MonoBehaviour:
   m_LightUnit: 0
   m_LuxAtDistance: 1
   m_Intensity: 20
-  m_InnerSpotPercent: 0
-  m_ShapeWidth: 0.5
-  m_ShapeHeight: 0.5
+  m_InnerSpotPercent: -1
+  m_ShapeWidth: -1
+  m_ShapeHeight: -1
   m_AspectRatio: 1
   m_SpotIESCutoffPercent: 100
   m_LightDimmer: 1
@@ -7221,7 +7235,7 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
-  m_Version: 10
+  m_Version: 14
   m_ObsoleteShadowResolutionTier: 1
   m_ObsoleteUseShadowQualitySettings: 0
   m_ObsoleteCustomShadowResolution: 512
@@ -7273,7 +7287,7 @@ Light:
   m_Intensity: 4000
   m_Range: 300
   m_SpotAngle: 40
-  m_InnerSpotAngle: 1
+  m_InnerSpotAngle: 8
   m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 0
@@ -7311,7 +7325,7 @@ Light:
   m_RenderingLayerMask: 1
   m_Lightmapping: 1
   m_LightShadowCasterMode: 2
-  m_AreaSize: {x: 1, y: 1}
+  m_AreaSize: {x: 0.5, y: 0.5}
   m_BounceIntensity: 50
   m_ColorTemperature: 20000
   m_UseColorTemperature: 0
@@ -7321,7 +7335,7 @@ Light:
   m_ForceVisible: 0
   m_ShadowRadius: 0.025
   m_ShadowAngle: 0
-  m_LightUnit: 1
+  m_LightUnit: 2
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
 --- !u!114 &3860909703512727289
@@ -7343,9 +7357,9 @@ MonoBehaviour:
   m_LightUnit: 2
   m_LuxAtDistance: 1
   m_Intensity: 4000
-  m_InnerSpotPercent: 20
-  m_ShapeWidth: 0.5
-  m_ShapeHeight: 0.5
+  m_InnerSpotPercent: -1
+  m_ShapeWidth: -1
+  m_ShapeHeight: -1
   m_AspectRatio: 1
   m_SpotIESCutoffPercent: 100
   m_LightDimmer: 1
@@ -7461,7 +7475,7 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
-  m_Version: 10
+  m_Version: 14
   m_ObsoleteShadowResolutionTier: 1
   m_ObsoleteUseShadowQualitySettings: 0
   m_ObsoleteCustomShadowResolution: 512
@@ -7513,7 +7527,7 @@ Light:
   m_Intensity: 3.9788735
   m_Range: 0.5
   m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
+  m_InnerSpotAngle: 0
   m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 0
@@ -7551,7 +7565,7 @@ Light:
   m_RenderingLayerMask: 1
   m_Lightmapping: 1
   m_LightShadowCasterMode: 2
-  m_AreaSize: {x: 1, y: 1}
+  m_AreaSize: {x: 0.5, y: 0.5}
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
@@ -7561,9 +7575,9 @@ Light:
   m_ForceVisible: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
-  m_LightUnit: 1
+  m_LightUnit: 0
   m_LuxAtDistance: 1
-  m_EnableSpotReflector: 1
+  m_EnableSpotReflector: 0
 --- !u!114 &3860909703600616533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7583,9 +7597,9 @@ MonoBehaviour:
   m_LightUnit: 0
   m_LuxAtDistance: 1
   m_Intensity: 50
-  m_InnerSpotPercent: 0
-  m_ShapeWidth: 0.5
-  m_ShapeHeight: 0.5
+  m_InnerSpotPercent: -1
+  m_ShapeWidth: -1
+  m_ShapeHeight: -1
   m_AspectRatio: 1
   m_SpotIESCutoffPercent: 100
   m_LightDimmer: 1
@@ -7701,7 +7715,7 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
-  m_Version: 10
+  m_Version: 14
   m_ObsoleteShadowResolutionTier: 1
   m_ObsoleteUseShadowQualitySettings: 0
   m_ObsoleteCustomShadowResolution: 512
@@ -7790,7 +7804,7 @@ Light:
   m_Intensity: 1.5915494
   m_Range: 0.5
   m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
+  m_InnerSpotAngle: 0
   m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 0
@@ -7828,7 +7842,7 @@ Light:
   m_RenderingLayerMask: 1
   m_Lightmapping: 1
   m_LightShadowCasterMode: 2
-  m_AreaSize: {x: 1, y: 1}
+  m_AreaSize: {x: 0.5, y: 0.5}
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
@@ -7838,9 +7852,9 @@ Light:
   m_ForceVisible: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
-  m_LightUnit: 1
+  m_LightUnit: 0
   m_LuxAtDistance: 1
-  m_EnableSpotReflector: 1
+  m_EnableSpotReflector: 0
 --- !u!114 &3860909703810497323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7860,9 +7874,9 @@ MonoBehaviour:
   m_LightUnit: 0
   m_LuxAtDistance: 1
   m_Intensity: 20
-  m_InnerSpotPercent: 0
-  m_ShapeWidth: 0.5
-  m_ShapeHeight: 0.5
+  m_InnerSpotPercent: -1
+  m_ShapeWidth: -1
+  m_ShapeHeight: -1
   m_AspectRatio: 1
   m_SpotIESCutoffPercent: 100
   m_LightDimmer: 1
@@ -7978,7 +7992,7 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
-  m_Version: 10
+  m_Version: 14
   m_ObsoleteShadowResolutionTier: 1
   m_ObsoleteUseShadowQualitySettings: 0
   m_ObsoleteCustomShadowResolution: 512
@@ -8030,7 +8044,7 @@ Light:
   m_Intensity: 4000
   m_Range: 300
   m_SpotAngle: 40
-  m_InnerSpotAngle: 4
+  m_InnerSpotAngle: 8
   m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 0
@@ -8068,7 +8082,7 @@ Light:
   m_RenderingLayerMask: 1
   m_Lightmapping: 1
   m_LightShadowCasterMode: 2
-  m_AreaSize: {x: 1, y: 1}
+  m_AreaSize: {x: 0.5, y: 0.5}
   m_BounceIntensity: 50
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
@@ -8078,7 +8092,7 @@ Light:
   m_ForceVisible: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
-  m_LightUnit: 1
+  m_LightUnit: 2
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
 --- !u!114 &3860909703912780996
@@ -8100,9 +8114,9 @@ MonoBehaviour:
   m_LightUnit: 2
   m_LuxAtDistance: 1
   m_Intensity: 4000
-  m_InnerSpotPercent: 20
-  m_ShapeWidth: 0.5
-  m_ShapeHeight: 0.5
+  m_InnerSpotPercent: -1
+  m_ShapeWidth: -1
+  m_ShapeHeight: -1
   m_AspectRatio: 1
   m_SpotIESCutoffPercent: 100
   m_LightDimmer: 1
@@ -8218,7 +8232,7 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
-  m_Version: 10
+  m_Version: 14
   m_ObsoleteShadowResolutionTier: 1
   m_ObsoleteUseShadowQualitySettings: 0
   m_ObsoleteCustomShadowResolution: 512
@@ -8270,7 +8284,7 @@ Light:
   m_Intensity: 3.9788735
   m_Range: 0.5
   m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
+  m_InnerSpotAngle: 0
   m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 0
@@ -8308,7 +8322,7 @@ Light:
   m_RenderingLayerMask: 1
   m_Lightmapping: 1
   m_LightShadowCasterMode: 2
-  m_AreaSize: {x: 1, y: 1}
+  m_AreaSize: {x: 0.5, y: 0.5}
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
@@ -8318,9 +8332,9 @@ Light:
   m_ForceVisible: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
-  m_LightUnit: 1
+  m_LightUnit: 0
   m_LuxAtDistance: 1
-  m_EnableSpotReflector: 1
+  m_EnableSpotReflector: 0
 --- !u!114 &3860909704105342322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8340,9 +8354,9 @@ MonoBehaviour:
   m_LightUnit: 0
   m_LuxAtDistance: 1
   m_Intensity: 50
-  m_InnerSpotPercent: 0
-  m_ShapeWidth: 0.5
-  m_ShapeHeight: 0.5
+  m_InnerSpotPercent: -1
+  m_ShapeWidth: -1
+  m_ShapeHeight: -1
   m_AspectRatio: 1
   m_SpotIESCutoffPercent: 100
   m_LightDimmer: 1
@@ -8458,7 +8472,7 @@ MonoBehaviour:
   m_AreaLightEmissiveMeshShadowCastingMode: 0
   m_AreaLightEmissiveMeshMotionVectorGenerationMode: 0
   m_AreaLightEmissiveMeshLayer: -1
-  m_Version: 10
+  m_Version: 14
   m_ObsoleteShadowResolutionTier: 1
   m_ObsoleteUseShadowQualitySettings: 0
   m_ObsoleteCustomShadowResolution: 512
@@ -9985,6 +9999,50 @@ Transform:
   - {fileID: 8821960820636513462}
   m_Father: {fileID: 7189905184882326266}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5611676146760841433
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2985067111493763757}
+  - component: {fileID: 2561553233750598400}
+  m_Layer: 0
+  m_Name: CarDoorManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2985067111493763757
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5611676146760841433}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.639022, y: 0, z: 2.7567077}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1869101567296985507}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2561553233750598400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5611676146760841433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a7660c4127e7264c946f4aab0b21532, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarDoorManager
 --- !u!1 &5666947270494420909
 GameObject:
   m_ObjectHideFlags: 0
@@ -18568,6 +18626,7 @@ GameObject:
   - component: {fileID: 6373610546167468963}
   - component: {fileID: 6373610546167468961}
   - component: {fileID: 6373610546167468962}
+  - component: {fileID: 7395486120868883451}
   m_Layer: 0
   m_Name: Body_F_Bumper_M
   m_TagString: Untagged
@@ -18647,6 +18706,18 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7395486120868883451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6373610546167468964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a7660c4127e7264c946f4aab0b21532, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarDoorManager
 --- !u!1 &6373610546214057461
 GameObject:
   m_ObjectHideFlags: 0
