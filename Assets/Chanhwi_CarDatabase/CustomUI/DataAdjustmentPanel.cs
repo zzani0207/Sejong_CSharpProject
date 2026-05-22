@@ -33,6 +33,11 @@ public class DataAdjustmentPanel : MonoBehaviour
     private List<DataAdjustmentUIItem> uiItems = new List<DataAdjustmentUIItem>();
     private List<IDataAdjustable> dataFields = new List<IDataAdjustable>();
 
+    // 동적 간격 조정을 위한 변수
+    private int totalPanelCount = 1;
+    private RectTransform panelRect;
+    private VerticalLayoutGroup panelVlg;
+
     private void OnEnable()
     {
         // itemPrefab 자동 할당 시도
@@ -58,7 +63,7 @@ public class DataAdjustmentPanel : MonoBehaviour
     private void EnsureLayoutComponents()
     {
         // Panel 본체: VerticalLayoutGroup + ContentSizeFitter (Title + ItemContainer 세로 정렬)
-        var panelVlg = GetComponent<VerticalLayoutGroup>();
+        panelVlg = GetComponent<VerticalLayoutGroup>();
         if (panelVlg == null) panelVlg = gameObject.AddComponent<VerticalLayoutGroup>();
         panelVlg.childForceExpandWidth = true;
         panelVlg.childForceExpandHeight = false;
@@ -72,6 +77,9 @@ public class DataAdjustmentPanel : MonoBehaviour
         if (panelCsf == null) panelCsf = gameObject.AddComponent<ContentSizeFitter>();
         panelCsf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
         panelCsf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+
+        // Panel RectTransform 캐시
+        panelRect = GetComponent<RectTransform>();
 
         // ItemContainer: VerticalLayoutGroup + ContentSizeFitter (아이템들 세로 정렬)
         if (itemContainer == null) return;
@@ -192,6 +200,59 @@ public class DataAdjustmentPanel : MonoBehaviour
     }
 
     /// <summary>
+    /// 전체 패널 개수 설정 및 간격 동적 조정
+    /// (SidebarUIManager에서 호출)
+    /// </summary>
+    public void SetTotalPanelCount(int count)
+    {
+        totalPanelCount = Mathf.Max(1, count);
+        UpdateDynamicSpacing();
+    }
+
+    /// <summary>
+    /// 화면 높이에 따라 패널 간격 동적 조정
+    /// 모든 패널이 화면에 보이도록 spacing을 계산
+    /// </summary>
+    private void UpdateDynamicSpacing()
+    {
+        if (panelVlg == null || panelRect == null)
+            return;
+
+        // Canvas 높이 (또는 부모 RectTransform 높이)
+        Canvas canvas = GetComponentInParent<Canvas>();
+        float availableHeight = canvas != null ? canvas.GetComponent<RectTransform>().rect.height : 1080f;
+
+        // 패널 하나당 평균 사용 가능한 높이
+        float heightPerPanel = availableHeight / totalPanelCount;
+
+        // 패널의 타이틀, 아이템들의 높이 예상값
+        // 타이틀: ~40px, 패딩: ~16px, 아이템 개수에 따라 가변
+        float reservedHeight = 40f + 16f;  // 타이틀 + 패딩
+        float estimatedItemHeight = uiItems.Count * 36f; // 아이템당 약 36px
+        float totalEstimatedHeight = reservedHeight + estimatedItemHeight;
+
+        // 이 패널이 차지하면 안 될 높이 여유 (다른 패널들을 위해)
+        float maxHeightForThisPanel = heightPerPanel * 0.9f; // 90% 사용
+
+        // 간격 계산: 아이템들 사이의 공간을 줄여서 패널을 압축
+        int itemCount = uiItems.Count;
+        float newSpacing = 4f; // 기본값
+
+        if (itemCount > 1 && totalEstimatedHeight > maxHeightForThisPanel)
+        {
+            // 과도하게 커지면 간격을 줄임
+            float reduction = (totalEstimatedHeight - maxHeightForThisPanel) / itemCount;
+            newSpacing = Mathf.Max(0f, 4f - reduction);
+        }
+
+        panelVlg.spacing = newSpacing;
+
+        // 레이아웃 갱신
+        if (panelRect != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(panelRect);
+    }
+
+    /// <summary>
     /// 에디터/플레이 모드 모두에서 안전하게 GameObject 제거
     /// </summary>
     private static void SafeDestroy(Object obj)
@@ -203,3 +264,4 @@ public class DataAdjustmentPanel : MonoBehaviour
             DestroyImmediate(obj);
     }
 }
+

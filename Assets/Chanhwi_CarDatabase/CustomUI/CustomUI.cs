@@ -67,6 +67,7 @@ public class CustomUI : MonoBehaviour
 
     private bool isExpanded;
     private CanvasGroup contentCanvasGroup;
+    private RectTransform toggleButtonRect;
 
     public bool IsExpanded => isExpanded;
 
@@ -81,6 +82,10 @@ public class CustomUI : MonoBehaviour
             if (contentCanvasGroup == null)
                 contentCanvasGroup = contentToHideOnCollapse.AddComponent<CanvasGroup>();
         }
+
+        // 토글 버튼 RectTransform 캐시
+        if (toggleButton != null)
+            toggleButtonRect = toggleButton.GetComponent<RectTransform>();
 
         // 토글 버튼이 사이드바 폭에 stretched되지 않도록 anchor 고정
         NormalizeToggleButtonAnchor();
@@ -154,6 +159,7 @@ public class CustomUI : MonoBehaviour
         if (!Application.isPlaying || animationDuration <= 0f)
         {
             SetWidthImmediate(target);
+            MoveToggleButtonImmediate(target);
             if (contentToHideOnCollapse != null)
             {
                 contentToHideOnCollapse.SetActive(expanded);
@@ -165,6 +171,7 @@ public class CustomUI : MonoBehaviour
         // 이전 트윈 중단
         Tween.StopAll(onTarget: sidebarRect);
         if (contentCanvasGroup != null) Tween.StopAll(onTarget: contentCanvasGroup);
+        if (toggleButtonRect != null) Tween.StopAll(onTarget: toggleButtonRect);
 
         // 확장 시작: 컨텐츠 즉시 활성화 (페이드 인 준비)
         if (expanded && contentToHideOnCollapse != null)
@@ -172,7 +179,7 @@ public class CustomUI : MonoBehaviour
             contentToHideOnCollapse.SetActive(true);
         }
 
-        // 폭 트윈 - PrimeTween Ease 사용
+        // 사이드바 폭 트윈
         float startWidth = sidebarRect.sizeDelta.x;
         Tween.Custom(startWidth, target, animationDuration, val =>
         {
@@ -180,6 +187,21 @@ public class CustomUI : MonoBehaviour
             size.x = val;
             sidebarRect.sizeDelta = size;
         }, ease);
+
+        // 🔴 토글 버튼 위치 트윈 (사이드바와 함께 이동, world position 기준)
+        if (toggleButtonRect != null)
+        {
+            float toggleStartX = toggleButtonRect.position.x;
+            float sidebarStartX = sidebarRect.position.x;
+            float toggleEndX = sidebarStartX + target;
+            
+            Tween.Custom(0f, 1f, animationDuration, t =>
+            {
+                Vector3 newPos = toggleButtonRect.position;
+                newPos.x = Mathf.Lerp(toggleStartX, toggleEndX, t);
+                toggleButtonRect.position = newPos;
+            }, ease);
+        }
 
         // 컨텐츠 알파 페이드
         if (contentCanvasGroup != null)
@@ -200,6 +222,17 @@ public class CustomUI : MonoBehaviour
         var size = sidebarRect.sizeDelta;
         size.x = width;
         sidebarRect.sizeDelta = size;
+    }
+
+    /// <summary>
+    /// 토글 버튼 위치를 즉시 이동 (사이드바 오른쪽 끝에 배치, world position 기준)
+    /// </summary>
+    private void MoveToggleButtonImmediate(float sidebarWidth)
+    {
+        if (toggleButtonRect == null) return;
+        Vector3 newPos = toggleButtonRect.position;
+        newPos.x = sidebarRect.position.x + sidebarWidth;
+        toggleButtonRect.position = newPos;
     }
 
     /// <summary>
