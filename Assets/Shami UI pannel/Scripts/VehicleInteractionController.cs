@@ -18,17 +18,23 @@ public class VehicleInteractionController : MonoBehaviour
     [Header("Mode")]
     [SerializeField] private VehicleArea currentArea = VehicleArea.Exterior;
 
+    [Header("Exterior Position Filter")]
+    [SerializeField] private bool useExteriorPositionFilter = true;
+
+    [Tooltip("차량 좌/우 기준 X 중앙값")]
+    [SerializeField] private float vehicleCenterX = -6.455f;
+
+    [Tooltip("차량 전/후 기준 Z 중앙값")]
+    [SerializeField] private float vehicleCenterZ = 4.5f;
+
     [Header("Debug Keys")]
     [SerializeField] private bool enableDebugModeKeys = true;
 
+    private bool isRaycastBlocked;
+    private bool isCameraTransitioning;
+
     private bool isExteriorPartFocused;
     private bool isInteriorPartFocused;
-
-    // 핵심: 이 값이 true면 차량 오브젝트 Raycast 클릭 차단
-    private bool isRaycastBlocked;
-
-    // 카메라 이동 중에도 추가 클릭 방지
-    private bool isCameraTransitioning;
 
     private void Awake()
     {
@@ -44,8 +50,8 @@ public class VehicleInteractionController : MonoBehaviour
 
     private void Update()
     {
-        Mouse mouse = Mouse.current;
         Keyboard keyboard = Keyboard.current;
+        Mouse mouse = Mouse.current;
 
         if (keyboard != null)
         {
@@ -83,11 +89,11 @@ public class VehicleInteractionController : MonoBehaviour
         if (targetCamera == null)
             return;
 
-        // UI 위를 클릭한 경우 차량 Raycast 막기
+        // UI 버튼 위 클릭이면 차량 오브젝트 Raycast 실행 안 함
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
             return;
 
-        // 패널이 열려 있거나 카메라 이동 중이면 차량 오브젝트 클릭 차단
+        // 패널 열림 / 카메라 이동 중에는 추가 클릭 차단
         if (IsVehicleRaycastBlocked())
             return;
 
@@ -107,14 +113,14 @@ public class VehicleInteractionController : MonoBehaviour
 
         Parts clickedPart = target.Part;
 
-        if (panelManager != null && !panelManager.HasPanel(clickedPart))
-        {
-            Debug.LogWarning($"Panel is not assigned for {clickedPart}");
-            return;
-        }
-
         if (currentArea == VehicleArea.Exterior)
         {
+            if (!IsExteriorPartAllowedByCameraPosition(clickedPart))
+            {
+                Debug.Log($"Blocked by exterior position filter: {clickedPart}");
+                return;
+            }
+
             HandleExteriorPartClick(clickedPart);
         }
         else
@@ -137,6 +143,13 @@ public class VehicleInteractionController : MonoBehaviour
         return false;
     }
 
+    private LayerMask GetCurrentMask()
+    {
+        return currentArea == VehicleArea.Exterior
+            ? exteriorPartMask
+            : interiorPartMask;
+    }
+
     private void HandleExteriorPartClick(Parts clickedPart)
     {
         isRaycastBlocked = true;
@@ -147,17 +160,16 @@ public class VehicleInteractionController : MonoBehaviour
 
         cameraMovement.SaveCurrentCameraPose();
 
-        // UI 패널 Fade In
         if (panelManager != null)
             panelManager.OpenPanel(clickedPart);
 
-        // 카메라 이동
         cameraMovement.GoView(clickedPart, () =>
         {
             isCameraTransitioning = false;
 
+            // UI 패널이 열린 동안 카메라 이동/회전 고정
             if (manualCameraController != null)
-                manualCameraController.SetExteriorMode();
+                manualCameraController.SetFixedViewMode();
         });
     }
 
@@ -171,25 +183,114 @@ public class VehicleInteractionController : MonoBehaviour
 
         cameraMovement.SaveCurrentCameraPose();
 
-        // UI 패널 Fade In
         if (panelManager != null)
             panelManager.OpenPanel(clickedPart);
 
-        // 내부 오브젝트 클릭 시 해당 view로 이동 후 시야 고정
         cameraMovement.GoView(clickedPart, () =>
         {
             isCameraTransitioning = false;
 
+            // 내부 상세 View에서는 시야 고정
             if (manualCameraController != null)
                 manualCameraController.SetFixedViewMode();
         });
     }
 
-    private LayerMask GetCurrentMask()
+    private bool IsExteriorPartAllowedByCameraPosition(Parts part)
     {
-        return currentArea == VehicleArea.Exterior
-            ? exteriorPartMask
-            : interiorPartMask;
+        if (!useExteriorPositionFilter)
+            return true;
+
+        Transform reference = GetCameraPositionReference();
+
+        if (reference == null)
+            return true;
+
+        Vector3 cameraPosition = reference.position;
+
+        // 라이트는 X 좌우가 아니라 Z 전후 기준으로 제한
+        if (IsLightPart(part))
+        {
+            return IsLightAllowedByCameraZ(part, cameraPosition.z);
+        }
+
+        // 라이트가 아닌 외부 파츠는 X 좌우 기준으로 제한
+        if (cameraPosition.x < vehicleCenterX)
+        {
+            return IsLeftExteriorPart(part);
+        }
+
+        if (cameraPosition.x > vehicleCenterX)
+        {
+            return IsRightExteriorPart(part);
+        }
+
+        return true;
+    }
+
+    private Transform GetCameraPositionReference()
+    {
+        // Cinemachine 구조에서는 ManualCameraController가 붙은 CM_PlayerCamera 기준
+        if (manualCameraController != null)
+            return manualCameraController.transform;
+
+        // fallback: 실제 렌더링 카메라
+        if (targetCamera != null)
+            return targetCamera.transform;
+
+        return null;
+    }
+
+    private bool IsLightPart(Parts part)
+    {
+        return IsFrontLight(part) || IsRearLight(part);
+    }
+
+    private bool IsFrontLight(Parts part)
+    {
+        return part == Parts.FrontLightL ||
+               part == Parts.FrontLightR;
+    }
+
+    private bool IsRearLight(Parts part)
+    {
+        return part == Parts.RearLightL ||
+               part == Parts.RearLightR;
+    }
+
+    private bool IsLightAllowedByCameraZ(Parts part, float cameraZ)
+    {
+        // 현재 기준:
+        // cameraZ < 4.5  -> 전면, 헤드라이트 클릭 허용
+        // cameraZ > 4.5  -> 후면, 후미등 클릭 허용
+        //
+        // 테스트했을 때 반대로 동작하면 아래 두 return만 서로 바꾸면 됨.
+
+        if (cameraZ > vehicleCenterZ)
+        {
+            return IsFrontLight(part);
+        }
+
+        if (cameraZ < vehicleCenterZ)
+        {
+            return IsRearLight(part);
+        }
+
+        return true;
+    }
+
+    private bool IsLeftExteriorPart(Parts part)
+    {
+        return part == Parts.LFTire ||
+               part == Parts.LBTire ||
+               part == Parts.LeftDoor;
+    }
+
+    private bool IsRightExteriorPart(Parts part)
+    {
+        return part == Parts.RFTire ||
+               part == Parts.RBTire ||
+               part == Parts.RightDoor;
     }
 
     private void CloseCurrentInteraction()
@@ -197,7 +298,7 @@ public class VehicleInteractionController : MonoBehaviour
         if (panelManager == null)
             return;
 
-        // 닫는 도중에도 추가 Raycast 막기
+        // 닫는 중에도 추가 클릭 방지
         isRaycastBlocked = true;
 
         if (currentArea == VehicleArea.Exterior && isExteriorPartFocused)
@@ -209,9 +310,10 @@ public class VehicleInteractionController : MonoBehaviour
                 cameraMovement.ReturnToSavedHome(() =>
                 {
                     isCameraTransitioning = false;
+                    isRaycastBlocked = false;
+
                     isExteriorPartFocused = false;
                     isInteriorPartFocused = false;
-                    isRaycastBlocked = false;
 
                     if (manualCameraController != null)
                         manualCameraController.SetExteriorMode();
@@ -230,9 +332,10 @@ public class VehicleInteractionController : MonoBehaviour
                 cameraMovement.ReturnToSavedHome(() =>
                 {
                     isCameraTransitioning = false;
+                    isRaycastBlocked = false;
+
                     isInteriorPartFocused = false;
                     isExteriorPartFocused = false;
-                    isRaycastBlocked = false;
 
                     if (manualCameraController != null)
                         manualCameraController.SetInteriorFreeMode();
@@ -246,6 +349,9 @@ public class VehicleInteractionController : MonoBehaviour
         {
             isRaycastBlocked = false;
             isCameraTransitioning = false;
+
+            isExteriorPartFocused = false;
+            isInteriorPartFocused = false;
         });
     }
 
@@ -258,6 +364,9 @@ public class VehicleInteractionController : MonoBehaviour
 
         isRaycastBlocked = true;
         isCameraTransitioning = true;
+
+        isExteriorPartFocused = false;
+        isInteriorPartFocused = false;
 
         if (panelManager != null)
             panelManager.CloseCurrentPanel();
@@ -272,9 +381,6 @@ public class VehicleInteractionController : MonoBehaviour
             if (manualCameraController != null)
                 manualCameraController.SetInteriorFreeMode();
         });
-
-        isExteriorPartFocused = false;
-        isInteriorPartFocused = false;
     }
 
     public void ExitInteriorMode()

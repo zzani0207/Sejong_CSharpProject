@@ -42,6 +42,9 @@ public class PanelManager : MonoBehaviour
             if (binding.animator == null)
                 binding.animator = binding.panelRoot.GetComponent<UIAnimationMaster>();
 
+            if (binding.closeButton == null)
+                binding.closeButton = binding.panelRoot.GetComponentInChildren<Button>(true);
+
             CanvasGroup canvasGroup = binding.panelRoot.GetComponent<CanvasGroup>();
 
             if (canvasGroup != null)
@@ -84,7 +87,10 @@ public class PanelManager : MonoBehaviour
 
     public void RequestClose()
     {
-        OnCloseRequested?.Invoke();
+        if (OnCloseRequested != null)
+            OnCloseRequested.Invoke();
+        else
+            CloseCurrentPanel();
     }
 
     public void CloseCurrentPanel(Action onComplete = null)
@@ -114,8 +120,10 @@ public class PanelManager : MonoBehaviour
 
     private void PlayIn(PartPanelBinding binding)
     {
-        if (binding.panelRoot != null)
-            binding.panelRoot.SetActive(true);
+        if (binding == null || binding.panelRoot == null)
+            return;
+
+        binding.panelRoot.SetActive(true);
 
         CanvasGroup canvasGroup = binding.panelRoot.GetComponent<CanvasGroup>();
 
@@ -126,15 +134,26 @@ public class PanelManager : MonoBehaviour
         }
 
         if (binding.animator != null)
+        {
             binding.animator.PlayIn();
+        }
+        else
+        {
+            // UIAnimationMaster가 없을 때 fallback
+            if (canvasGroup != null)
+                canvasGroup.alpha = 1f;
+        }
     }
 
     private void PlayOut(PartPanelBinding binding, Action onComplete = null)
     {
-        CanvasGroup canvasGroup = null;
+        if (binding == null || binding.panelRoot == null)
+        {
+            onComplete?.Invoke();
+            return;
+        }
 
-        if (binding.panelRoot != null)
-            canvasGroup = binding.panelRoot.GetComponent<CanvasGroup>();
+        CanvasGroup canvasGroup = binding.panelRoot.GetComponent<CanvasGroup>();
 
         if (canvasGroup != null)
         {
@@ -143,8 +162,16 @@ public class PanelManager : MonoBehaviour
         }
 
         if (binding.animator != null)
+        {
             binding.animator.PlayOut(onComplete);
+        }
         else
+        {
+            // UIAnimationMaster가 없을 때 fallback
+            if (canvasGroup != null)
+                canvasGroup.alpha = 0f;
+
             onComplete?.Invoke();
+        }
     }
 }
