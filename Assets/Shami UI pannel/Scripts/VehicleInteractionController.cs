@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -36,10 +37,20 @@ public class VehicleInteractionController : MonoBehaviour
     private bool isExteriorPartFocused;
     private bool isInteriorPartFocused;
 
+    public VehicleArea CurrentArea => currentArea;
+    public bool IsInteriorMode => currentArea == VehicleArea.Interior;
+
+    public event Action<VehicleArea> OnAreaChanged;
+
     private void Awake()
     {
         if (panelManager != null)
             panelManager.OnCloseRequested += CloseCurrentInteraction;
+    }
+
+    private void Start()
+    {
+        NotifyAreaChanged();
     }
 
     private void OnDestroy()
@@ -261,10 +272,8 @@ public class VehicleInteractionController : MonoBehaviour
     private bool IsLightAllowedByCameraZ(Parts part, float cameraZ)
     {
         // 현재 기준:
-        // cameraZ < 4.5  -> 전면, 헤드라이트 클릭 허용
-        // cameraZ > 4.5  -> 후면, 후미등 클릭 허용
-        //
-        // 테스트했을 때 반대로 동작하면 아래 두 return만 서로 바꾸면 됨.
+        // cameraZ > 4.5  -> 전면, 헤드라이트 클릭 허용
+        // cameraZ < 4.5  -> 후면, 후미등 클릭 허용
 
         if (cameraZ > vehicleCenterZ)
         {
@@ -360,7 +369,11 @@ public class VehicleInteractionController : MonoBehaviour
         if (IsVehicleRaycastBlocked())
             return;
 
+        if (currentArea == VehicleArea.Interior)
+            return;
+
         currentArea = VehicleArea.Interior;
+        NotifyAreaChanged();
 
         isRaycastBlocked = true;
         isCameraTransitioning = true;
@@ -388,6 +401,9 @@ public class VehicleInteractionController : MonoBehaviour
         if (isCameraTransitioning)
             return;
 
+        if (currentArea == VehicleArea.Exterior)
+            return;
+
         isRaycastBlocked = true;
         isCameraTransitioning = true;
 
@@ -397,6 +413,7 @@ public class VehicleInteractionController : MonoBehaviour
         cameraMovement.ReturnToSavedHome(() =>
         {
             currentArea = VehicleArea.Exterior;
+            NotifyAreaChanged();
 
             isCameraTransitioning = false;
             isRaycastBlocked = false;
@@ -407,5 +424,10 @@ public class VehicleInteractionController : MonoBehaviour
             if (manualCameraController != null)
                 manualCameraController.SetExteriorMode();
         });
+    }
+
+    private void NotifyAreaChanged()
+    {
+        OnAreaChanged?.Invoke(currentArea);
     }
 }
