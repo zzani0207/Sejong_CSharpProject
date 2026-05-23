@@ -175,6 +175,9 @@ public class SidebarUIManager : MonoBehaviour
             categoryName = categoryName,
             provider = provider
         };
+
+        // 🔴 패널 개수 업데이트 및 동적 간격 조정
+        UpdateAllPanelDynamicSpacing();
     }
 
     /// <summary>
@@ -209,6 +212,19 @@ public class SidebarUIManager : MonoBehaviour
                 if (child.name.StartsWith("Panel_"))
                     SafeDestroy(child.gameObject);
             }
+        }
+    }
+
+    /// <summary>
+    /// 모든 활성 패널의 동적 간격 업데이트
+    /// 화면에 모든 패널이 맞도록 자동으로 조정
+    /// </summary>
+    private void UpdateAllPanelDynamicSpacing()
+    {
+        int panelCount = activePanels.Count;
+        foreach (var info in activePanels.Values)
+        {
+            info.panel.SetTotalPanelCount(panelCount);
         }
     }
 
