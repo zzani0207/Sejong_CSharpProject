@@ -34,6 +34,8 @@ public class RotatingDoor : MonoBehaviour, IDoor
         StopAnimation();
         animationCoroutine = StartCoroutine(AnimateDoor(1f));
         isOpen = true;
+        if (audiomanager.Instance != null)
+            audiomanager.Instance.PlayDoorOpenSound();
     }
 
     public void Close()
@@ -42,6 +44,8 @@ public class RotatingDoor : MonoBehaviour, IDoor
         StopAnimation();
         animationCoroutine = StartCoroutine(AnimateDoor(0f));
         isOpen = false;
+        if (audiomanager.Instance != null)
+            audiomanager.Instance.PlayDoorOpenSound();
     }
 
     public void Toggle()
