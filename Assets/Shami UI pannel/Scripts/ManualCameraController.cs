@@ -10,13 +10,31 @@ public class ManualCameraController : MonoBehaviour
     [Header("Move")]
     [SerializeField] private float moveSpeed = 4f;
     [SerializeField] private float fastMultiplier = 2f;
-
-    [Tooltip("true면 우클릭 시야 조작 모드일 때만 WASD 이동")]
     [SerializeField] private bool moveOnlyWhileLookMode = true;
+
+    [Header("Position Limit")]
+    [SerializeField] private float minY = 0f;
+
+    [Header("Interior Rotation Limit")]
+    [SerializeField] private Vector2 interiorPitchLimit = new Vector2(-25f, 25f);
+    [SerializeField] private Vector2 interiorYawLimit = new Vector2(-60f, 60f);
 
     private bool allowLook = true;
     private bool allowMove = true;
     private bool lookMode;
+
+    private bool useInteriorRotationLimit;
+
+    private float pitch;
+    private float yaw;
+    private float baseInteriorPitch;
+    private float baseInteriorYaw;
+
+    private void OnEnable()
+    {
+        SyncRotationState();
+        ClampPosition();
+    }
 
     private void OnDisable()
     {
@@ -38,6 +56,8 @@ public class ManualCameraController : MonoBehaviour
 
         if (keyboard != null && allowMove)
             HandleMove(keyboard);
+
+        ClampPosition();
     }
 
     private void HandleLookModeToggle(Mouse mouse)
@@ -79,13 +99,25 @@ public class ManualCameraController : MonoBehaviour
     {
         Vector2 mouseDelta = mouse.delta.ReadValue();
 
-        Vector3 euler = transform.eulerAngles;
+        pitch -= mouseDelta.y * mouseSensitivity;
+        yaw += mouseDelta.x * mouseSensitivity;
 
-        euler.x -= mouseDelta.y * mouseSensitivity;
-        euler.y += mouseDelta.x * mouseSensitivity;
-        euler.z = 0f;
+        if (useInteriorRotationLimit)
+        {
+            pitch = Mathf.Clamp(
+                pitch,
+                baseInteriorPitch + interiorPitchLimit.x,
+                baseInteriorPitch + interiorPitchLimit.y
+            );
 
-        transform.eulerAngles = euler;
+            yaw = Mathf.Clamp(
+                yaw,
+                baseInteriorYaw + interiorYawLimit.x,
+                baseInteriorYaw + interiorYawLimit.y
+            );
+        }
+
+        transform.rotation = Quaternion.Euler(pitch, yaw, 0f);
     }
 
     private void HandleMove(Keyboard keyboard)
@@ -116,6 +148,38 @@ public class ManualCameraController : MonoBehaviour
             speed *= fastMultiplier;
 
         transform.position += input.normalized * speed * Time.deltaTime;
+
+        ClampPosition();
+    }
+
+    private void ClampPosition()
+    {
+        Vector3 pos = transform.position;
+
+        if (pos.y < minY)
+        {
+            pos.y = minY;
+            transform.position = pos;
+        }
+    }
+
+    private void SyncRotationState()
+    {
+        Vector3 euler = transform.eulerAngles;
+
+        pitch = NormalizeAngle(euler.x);
+        yaw = NormalizeAngle(euler.y);
+    }
+
+    private float NormalizeAngle(float angle)
+    {
+        while (angle > 180f)
+            angle -= 360f;
+
+        while (angle < -180f)
+            angle += 360f;
+
+        return angle;
     }
 
     public void SetExteriorMode()
@@ -124,7 +188,10 @@ public class ManualCameraController : MonoBehaviour
 
         allowLook = true;
         allowMove = true;
+        useInteriorRotationLimit = false;
 
+        SyncRotationState();
+        ClampPosition();
         SetLookMode(false);
     }
 
@@ -134,7 +201,14 @@ public class ManualCameraController : MonoBehaviour
 
         allowLook = true;
         allowMove = false;
+        useInteriorRotationLimit = true;
 
+        SyncRotationState();
+
+        baseInteriorPitch = pitch;
+        baseInteriorYaw = yaw;
+
+        ClampPosition();
         SetLookMode(false);
     }
 
@@ -144,6 +218,8 @@ public class ManualCameraController : MonoBehaviour
         allowMove = false;
 
         SetLookMode(false);
+        ClampPosition();
+
         enabled = false;
     }
 }

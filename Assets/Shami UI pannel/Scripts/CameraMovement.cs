@@ -24,7 +24,8 @@ public enum Parts
 
 public class CameraMovement : MonoBehaviour
 {
-    [SerializeField] private Camera targetCamera;
+    [Header("Camera Target")]
+    [SerializeField] private Transform cameraRoot;
 
     [Header("Camera Points")]
     [SerializeField] private Transform homeView;
@@ -33,6 +34,9 @@ public class CameraMovement : MonoBehaviour
     [Header("Tween Settings")]
     [SerializeField] private float duration = 1.0f;
     [SerializeField] private Ease ease = Ease.InOutSine;
+
+    [Header("Position Limit")]
+    [SerializeField] private float minCameraY = 0f;
 
     [Header("Manual Camera Control")]
     [SerializeField] private ManualCameraController manualCameraController;
@@ -43,23 +47,39 @@ public class CameraMovement : MonoBehaviour
     {
         get
         {
-            if (targetCamera != null)
-                return targetCamera.transform;
+            if (cameraRoot != null)
+                return cameraRoot;
 
-            return Camera.main.transform;
+            Debug.LogWarning("Camera Root is not assigned. Assign CM_PlayerCamera.");
+            return null;
         }
     }
 
     public void SaveCurrentCameraPose()
     {
         Transform cam = CamTransform;
-        savedHomePose = new Pose(cam.position, cam.rotation);
+
+        if (cam == null)
+            return;
+
+        Vector3 clampedPosition = ClampCameraPosition(cam.position);
+        savedHomePose = new Pose(clampedPosition, cam.rotation);
     }
 
     public void GoView(Parts part, Action onComplete = null)
     {
         Debug.Log($"Go to view {part}");
-        MoveCameraTo(views[(int)part], onComplete);
+
+        int index = (int)part;
+
+        if (views == null || index < 0 || index >= views.Length || views[index] == null)
+        {
+            Debug.LogWarning($"Camera view is not assigned for {part}");
+            onComplete?.Invoke();
+            return;
+        }
+
+        MoveCameraTo(views[index], onComplete);
     }
 
     public void GoHome(Action onComplete = null)
@@ -67,6 +87,7 @@ public class CameraMovement : MonoBehaviour
         if (homeView == null)
         {
             Debug.LogWarning("Home View is not assigned.");
+            onComplete?.Invoke();
             return;
         }
 
@@ -75,7 +96,14 @@ public class CameraMovement : MonoBehaviour
 
     public void ReturnToSavedHome(Action onComplete = null)
     {
-        homeView.position = savedHomePose.position;
+        if (homeView == null)
+        {
+            Debug.LogWarning("Home View is not assigned.");
+            onComplete?.Invoke();
+            return;
+        }
+
+        homeView.position = ClampCameraPosition(savedHomePose.position);
         homeView.rotation = savedHomePose.rotation;
 
         GoHome(onComplete);
@@ -83,21 +111,63 @@ public class CameraMovement : MonoBehaviour
 
     private void MoveCameraTo(Transform targetView, Action onComplete = null)
     {
-        if (targetView == null) return;
+        if (targetView == null)
+        {
+            onComplete?.Invoke();
+            return;
+        }
 
         Transform cam = CamTransform;
+
+        if (cam == null)
+        {
+            onComplete?.Invoke();
+            return;
+        }
 
         if (manualCameraController != null)
             manualCameraController.SetFixedViewMode();
 
+        Vector3 targetPosition = ClampCameraPosition(targetView.position);
+        Quaternion targetRotation = targetView.rotation;
+
         Tween.StopAll(onTarget: cam);
 
         Sequence.Create()
-            .Group(Tween.Position(cam, endValue: targetView.position, duration: duration, ease: ease))
-            .Group(Tween.Rotation(cam, endValue: targetView.rotation, duration: duration, ease: ease))
+            .Group(Tween.Position(
+                cam,
+                endValue: targetPosition,
+                duration: duration,
+                ease: ease
+            ))
+            .Group(Tween.Rotation(
+                cam,
+                endValue: targetRotation,
+                duration: duration,
+                ease: ease
+            ))
             .OnComplete(() =>
             {
+                ClampCameraRootInstant();
                 onComplete?.Invoke();
             });
+    }
+
+    private Vector3 ClampCameraPosition(Vector3 position)
+    {
+        if (position.y < minCameraY)
+            position.y = minCameraY;
+
+        return position;
+    }
+
+    private void ClampCameraRootInstant()
+    {
+        Transform cam = CamTransform;
+
+        if (cam == null)
+            return;
+
+        cam.position = ClampCameraPosition(cam.position);
     }
 }
