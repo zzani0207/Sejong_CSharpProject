@@ -180,7 +180,7 @@
 ## 🔌 이벤트 연동
 
 ```
-CarManager
+CarDataManager
     │
     └─→ OnCarChanged (Event)
         │
@@ -240,9 +240,9 @@ Assets/Chanhwi_CarDatabase/CustomUI/
 1. Start()
    └─→ CustomUI.Initialize()
        └─→ SidebarUIManager 할당
-       └─→ CarManager.OnCarChanged 구독
+       └─→ CarDataManager.OnCarChanged 구독
 
-2. CarManager에서 자동차 변경
+2. CarDataManager에서 자동차 변경
    └─→ OnCarChanged 발생
        └─→ SidebarUIManager 갱신
            └─→ All DataProviders SetCarData()

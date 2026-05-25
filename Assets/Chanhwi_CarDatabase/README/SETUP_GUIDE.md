@@ -2,7 +2,7 @@
 
 ## 📋 각 스크립트의 역할 및 할당 내용
 
-### 1️⃣ **CarManager** (데이터 소스 - 반드시 씬에 존재해야 함)
+### 1️⃣ **CarDataManager** (데이터 소스 - 반드시 씬에 존재해야 함)
 
 **위치**: Hierarchy 최상위 (Canvas 밖)
 
@@ -10,8 +10,8 @@
 
 **설정 방법**:
 ```
-1. Hierarchy → Create Empty → 이름을 "CarManager"로 변경
-2. Add Component → CarManager 스크립트 추가
+1. Hierarchy → Create Empty → 이름을 "CarDataManager"로 변경
+2. Add Component → CarDataManager 스크립트 추가
 3. Inspector에서 Car Database 어셋 할당
 ```
 
@@ -73,9 +73,9 @@ Hierarchy에서 SidebarUI 오브젝트를 Inspector의 필드로 드래그
 0️⃣ 프리팹 생성 (처음 한 번만)
    Tools > Custom UI > Create Panel Prefab
 
-1️⃣ CarManager 씬에 추가
-   Hierarchy → Create Empty "CarManager"
-   → CarManager 스크립트 추가
+1️⃣ CarDataManager 씬에 추가
+   Hierarchy → Create Empty "CarDataManager"
+   → CarDataManager 스크립트 추가
    → CarDatabase 어셋 할당
 
 2️⃣ Canvas 구조 구성
@@ -102,7 +102,7 @@ Hierarchy에서 SidebarUI 오브젝트를 Inspector의 필드로 드래그
 
 ### **SidebarUIManager** - Inspector 할당 불필요
 - SidebarUISetup이 panelPrefab과 panelContainer를 전달
-- CarManager의 차량 변경 이벤트를 감지해 패널 자동 갱신
+- CarDataManager의 차량 변경 이벤트를 감지해 패널 자동 갱신
 
 ### **CustomUI** - Inspector 할당 불필요
 - CanvasGroup을 자동으로 찾아 UI 투명도 제어
@@ -132,12 +132,12 @@ A: SidebarUI에 **SidebarUIManager 컴포넌트가 추가됐는지** 확인하�
 
 **Q: 패널이 안 나타나요**
 A: 순서대로 확인하세요:
-- [ ] CarManager가 씬에 있고 CarDatabase가 할당됐나?
+- [ ] CarDataManager가 씬에 있고 CarDatabase가 할당됐나?
 - [ ] SidebarUISetup의 4개 필드가 모두 할당됐나?
 - [ ] Panel Container가 SidebarUI의 자식인가?
 
 **Q: Play 모드에서 슬라이더 값이 0이에요**
-A: **CarManager가 씬에 없거나 CarDatabase가 할당 안 됐을 가능성이 높습니다.**
+A: **CarDataManager가 씬에 없거나 CarDatabase가 할당 안 됐을 가능성이 높습니다.**
 
 **Q: CustomUI / SidebarUIManager는 뭘 할당하나요?**
 A: Inspector에서 직접 할당하는 것 없음. SidebarUISetup이 런타임에 전달합니다.

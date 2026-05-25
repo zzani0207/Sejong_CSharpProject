@@ -8,7 +8,7 @@
 Chanhwi_CarDatabase/
 ├── CarData.cs              # 개별 차 데이터 (ScriptableObject)
 ├── CarDataBase.cs          # 차 데이터베이스 관리
-├── CarManager.cs           # 런타임 차량 상태 관리 (Singleton)
+├── CarDataManager.cs           # 런타임 차량 상태 관리 (Singleton)
 ├── CarUIController.cs      # UI 연동 컨트롤러
 ├── CarDataCreator.cs       # 샘플 데이터 생성 에디터 스크립트
 └── README.md              # 이 파일
@@ -34,7 +34,7 @@ Chanhwi_CarDatabase/
   - 성능 정렬 (최대속도 등)
   - 딕셔너리 캐싱으로 빠른 검색
 
-### 3. **CarManager.cs** - 런타임 매니저 (Singleton)
+### 3. **CarDataManager.cs** - 런타임 매니저 (Singleton)
 - **역할**: 게임 실행 중 차 상태 관리
 - **특징**:
   - 현재 선택된 차 추적
@@ -43,7 +43,7 @@ Chanhwi_CarDatabase/
   - `DontDestroyOnLoad` - 씬 전환 시에도 유지
 
 ### 4. **CarUIController.cs** - UI 연동
-- **역할**: CarManager의 이벤트를 구독하여 UI 자동 업데이트
+- **역할**: CarDataManager의 이벤트를 구독하여 UI 자동 업데이트
 - **특징**:
   - 모든 Text/Slider UI 자동 갱신
   - 배터리 슬라이더 실시간 연동
@@ -74,39 +74,39 @@ Inspector에서 생성한 CarData들을 배열에 할당합니다.
 
 ### 3️⃣ 씬 설정
 
-1. 빈 GameObject 생성 → `CarManager` 스크립트 추가
-2. CarManager의 Inspector에서 CarDatabase 할당
+1. 빈 GameObject 생성 → `CarDataManager` 스크립트 추가
+2. CarDataManager의 Inspector에서 CarDatabase 할당
 3. Canvas에 UI 구성 (Text, Slider 등)
 4. Canvas 또는 Panel에 `CarUIController` 스크립트 추가
 5. Inspector에서 각 UI 요소 할당
 
 ## 💻 코드 예제
 
-### CarManager 사용
+### CarDataManager 사용
 
 ```csharp
 // 차 선택
-CarManager.Instance.SelectCar(0);           // 인덱스로
-CarManager.Instance.SelectCarByName("Tesla Model S");  // 이름으로
+CarDataManager.Instance.SelectCar(0);           // 인덱스로
+CarDataManager.Instance.SelectCarByName("Tesla Model S");  // 이름으로
 
 // 차 전환
-CarManager.Instance.SelectNextCar();
-CarManager.Instance.SelectPreviousCar();
+CarDataManager.Instance.SelectNextCar();
+CarDataManager.Instance.SelectPreviousCar();
 
 // 배터리 조작
-CarManager.Instance.ChargeBattery(20);      // 20% 충전
-CarManager.Instance.DischargeBattery(10);   // 10% 방전
+CarDataManager.Instance.ChargeBattery(20);      // 20% 충전
+CarDataManager.Instance.DischargeBattery(10);   // 10% 방전
 
 // 주행거리 추가
-CarManager.Instance.AddMileage(100);        // 100km 주행
+CarDataManager.Instance.AddMileage(100);        // 100km 주행
 
 // 현재 차 정보
-Debug.Log(CarManager.Instance.CurrentCar.CarName);
-Debug.Log(CarManager.Instance.CurrentCar.CurrentChargeLevel);
+Debug.Log(CarDataManager.Instance.CurrentCar.CarName);
+Debug.Log(CarDataManager.Instance.CurrentCar.CurrentChargeLevel);
 
 // 정보 출력
-CarManager.Instance.PrintCurrentCarInfo();
-CarManager.Instance.PrintAllCarsInfo();
+CarDataManager.Instance.PrintCurrentCarInfo();
+CarDataManager.Instance.PrintAllCarsInfo();
 ```
 
 ### 이벤트 구독 (커스텀 스크립트에서)
@@ -116,9 +116,9 @@ public class MyScript : MonoBehaviour
 {
     private void Start()
     {
-        CarManager.Instance.OnCarChanged += HandleCarChanged;
-        CarManager.Instance.OnBatteryChanged += HandleBatteryChanged;
-        CarManager.Instance.OnMileageChanged += HandleMileageChanged;
+        CarDataManager.Instance.OnCarChanged += HandleCarChanged;
+        CarDataManager.Instance.OnBatteryChanged += HandleBatteryChanged;
+        CarDataManager.Instance.OnMileageChanged += HandleMileageChanged;
     }
 
     private void HandleCarChanged(CarData car)
@@ -138,9 +138,9 @@ public class MyScript : MonoBehaviour
 
     private void OnDestroy()
     {
-        CarManager.Instance.OnCarChanged -= HandleCarChanged;
-        CarManager.Instance.OnBatteryChanged -= HandleBatteryChanged;
-        CarManager.Instance.OnMileageChanged -= HandleMileageChanged;
+        CarDataManager.Instance.OnCarChanged -= HandleCarChanged;
+        CarDataManager.Instance.OnBatteryChanged -= HandleBatteryChanged;
+        CarDataManager.Instance.OnMileageChanged -= HandleMileageChanged;
     }
 }
 ```
@@ -151,7 +151,7 @@ public class MyScript : MonoBehaviour
    - 각 클래스는 하나의 책임만 가짐
    - CarData: 데이터 저장
    - CarDatabase: 데이터 관리
-   - CarManager: 상태 관리
+   - CarDataManager: 상태 관리
    - CarUIController: UI 표시
 
 2. **개방-폐쇄 원칙 (OCP)**
@@ -159,11 +159,11 @@ public class MyScript : MonoBehaviour
    - ScriptableObject만 생성하면 됨
 
 3. **의존성 역전 원칙 (DIP)**
-   - CarUIController는 구체적인 CarManager에 의존하지 않음
+   - CarUIController는 구체적인 CarDataManager에 의존하지 않음
    - 이벤트를 통한 느슨한 결합
 
 4. **싱글톤 패턴**
-   - CarManager는 게임 전체에서 하나만 존재
+   - CarDataManager는 게임 전체에서 하나만 존재
    - 어디서든 쉽게 접근 가능
 
 ## 📊 데이터 정보
@@ -196,7 +196,7 @@ public class MyScript : MonoBehaviour
 
 ## ⚠️ 주의사항
 
-- `CarManager`는 Singleton이므로 여러 개 생성하면 안 됨
+- `CarDataManager`는 Singleton이므로 여러 개 생성하면 안 됨
 - UI는 반드시 `CarUIController`가 있는 Canvas에 자식으로 배치
 - CarDatabase 할당 없이 게임 시작 시 에러 발생
 

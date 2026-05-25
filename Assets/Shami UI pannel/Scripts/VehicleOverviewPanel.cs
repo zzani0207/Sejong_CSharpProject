@@ -3,32 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum VehicleConnectionStatus
-{
-    Connected,
-    Disconnected,
-    Syncing,
-    Error
-}
-
-public enum VehicleSystemStatus
-{
-    Normal,
-    Warning,
-    Critical,
-    Offline
-}
-
-public enum VehicleWarningType
-{
-    None,
-    TirePressureLow,
-    BatteryLow,
-    DoorOpen,
-    LightLeftOn,
-    SensorOffline
-}
-
 [Serializable]
 public class VehicleOverviewData
 {
@@ -63,8 +37,11 @@ public class VehicleOverviewPanel : MonoBehaviour
     [SerializeField] private VehicleInteractionController vehicleInteractionController;
     [SerializeField] private GameObject maintenanceLogPanel;
 
+    [Header("CarData 연동")]
+    [SerializeField] private CarData carData;
+
     [Header("Debug / Dummy Data")]
-    [SerializeField] private bool useDummyDataOnStart = true;
+    [SerializeField] private bool useDummyDataOnStart = false;
 
     private void Awake()
     {
@@ -101,7 +78,12 @@ public class VehicleOverviewPanel : MonoBehaviour
 
     private void Start()
     {
-        if (useDummyDataOnStart)
+        // CarData가 할당되면 그것을 사용, 아니면 더미 데이터 사용
+        if (carData != null)
+        {
+            LoadDataFromCarData();
+        }
+        else if (useDummyDataOnStart)
         {
             VehicleOverviewData dummyData = new VehicleOverviewData
             {
@@ -120,6 +102,39 @@ public class VehicleOverviewPanel : MonoBehaviour
             UpdateInteriorButtonLabel(vehicleInteractionController.CurrentArea);
         else
             SetInteriorButtonText(enterInteriorLabel);
+    }
+
+    /// <summary>
+    /// CarData에서 데이터를 로드해서 UI에 표시합니다.
+    /// </summary>
+    public void LoadDataFromCarData()
+    {
+        if (carData == null)
+        {
+            Debug.LogWarning("CarData가 할당되지 않았습니다.");
+            return;
+        }
+
+        VehicleOverviewData data = new VehicleOverviewData
+        {
+            vehicleName = carData.CarName,
+            vehicleLocation = carData.VehicleLocation,
+            connectionStatus = carData.ConnectionStatus,
+            systemStatus = carData.SystemStatus,
+            warningType = carData.WarningType,
+            lastUpdateTime = carData.LastUpdateTime.ToString("yyyy-MM-dd HH:mm:ss")
+        };
+
+        SetOverviewData(data);
+    }
+
+    /// <summary>
+    /// CarData 참조를 설정하고 데이터를 로드합니다.
+    /// </summary>
+    public void SetCarData(CarData newCarData)
+    {
+        carData = newCarData;
+        LoadDataFromCarData();
     }
 
     public void SetOverviewData(VehicleOverviewData data)

@@ -34,8 +34,8 @@ Tools > Custom UI > Create Panel Prefab
 ```
 Hierarchy:
 
-CarManager  ← 빈 GameObject (Canvas 밖에 생성)
-  └─ [CarManager 스크립트 추가 → CarDatabase 어셋 할당]
+CarDataManager  ← 빈 GameObject (Canvas 밖에 생성)
+  └─ [CarDataManager 스크립트 추가 → CarDatabase 어셋 할당]
 
 Canvas
   └─ SidebarUI  ← 빈 GameObject
@@ -45,7 +45,7 @@ Canvas
        └─ PanelContainer  ← 빈 자식 GameObject
 ```
 
-> ⚠️ **CarManager 없이 Play하면 슬라이더 값이 모두 0으로 표시됩니다.**
+> ⚠️ **CarDataManager 없이 Play하면 슬라이더 값이 모두 0으로 표시됩니다.**
 
 ---
 
@@ -88,8 +88,8 @@ Canvas
 
 | 컴포넌트 | 역할 |
 |---------|------|
-| **CarManager** | 현재 선택된 차량 데이터 관리 (싱글톤) |
-| **SidebarUIManager** | 패널 생성·삭제, CarManager 이벤트 처리 |
+| **CarDataManager** | 현재 선택된 차량 데이터 관리 (싱글톤) |
+| **SidebarUIManager** | 패널 생성·삭제, CarDataManager 이벤트 처리 |
 | **CustomUI** | 전체 UI 표시/숨김 관리 |
 | **SidebarUISetup** | Inspector 버튼으로 UI 자동 생성 |
 | **DataAdjustmentPanel** | 슬라이더 그룹 패널 (프리팹) |
@@ -103,7 +103,7 @@ Canvas
 |------|------|--------|
 | "Sidebar Manager를 할당하세요!" 오류 | SidebarUIManager 컴포넌트 미추가 | SidebarUI에 Add Component → SidebarUIManager |
 | 패널이 안 나타남 | Panel Container 미할당 | SidebarUISetup의 Panel Container 필드에 PanelContainer 드래그 |
-| 슬라이더 값이 전부 0 | CarManager 없음 또는 CarDatabase 미할당 | Hierarchy에 CarManager 추가 후 CarDatabase 할당 |
+| 슬라이더 값이 전부 0 | CarDataManager 없음 또는 CarDatabase 미할당 | Hierarchy에 CarDataManager 추가 후 CarDatabase 할당 |
 | 프리팹 생성 안 됨 | Tools 메뉴 미실행 | `Tools > Custom UI > Create Panel Prefab` 실행 |
 
 ---

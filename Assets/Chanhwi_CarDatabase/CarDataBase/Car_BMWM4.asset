@@ -36,3 +36,7 @@ MonoBehaviour:
   weight: 2000
   color: Silver
   seatingCapacity: 5
+  vehicleLocation: Garage A
+  connectionStatus: 0
+  systemStatus: 0
+  warningType: 0

@@ -2512,6 +2512,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a7660c4127e7264c946f4aab0b21532, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarDoorManager
+  frontLeftDoorObject: {fileID: 0}
+  frontRightDoorObject: {fileID: 0}
+  bonnetObject: {fileID: 0}
+  trunkObject: {fileID: 0}
+  headlightObjects: []
+  rearlightObjects: []
 --- !u!1 &1267475575655513205
 GameObject:
   m_ObjectHideFlags: 0
@@ -4876,6 +4882,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1869101567296985507}
+  - component: {fileID: 1478335453123974141}
+  - component: {fileID: 8892166399403565508}
   m_Layer: 0
   m_Name: GBX_Coupe_MD
   m_TagString: Untagged
@@ -4893,7 +4901,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.58062005, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1869101565472524588}
@@ -4907,6 +4915,50 @@ Transform:
   - {fileID: 2985067111493763757}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1478335453123974141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869101567296985506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a7660c4127e7264c946f4aab0b21532, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarDoorManager
+  frontLeftDoorObject: {fileID: 6373610546245712137}
+  frontRightDoorObject: {fileID: 6373610544806940610}
+  bonnetObject: {fileID: 6373610544642347785}
+  trunkObject: {fileID: 6373610544944451388}
+  headlightObjects:
+  - {fileID: 3860909703912780998}
+  - {fileID: 3860909703512727291}
+  rearlightObjects:
+  - {fileID: 3860909703600616535}
+  - {fileID: 3860909704105342092}
+--- !u!114 &8892166399403565508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869101567296985506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c41acbf2b207c4644932cad0afc57af3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorInputController
+  doorManager: {fileID: 0}
+  openAllKey: 111
+  closeAllKey: 99
+  leftDoorKey: 113
+  rightDoorKey: 101
+  bonnetKey: 98
+  trunkKey: 116
+  headlightsKey: 104
+  rearlightsKey: 120
+  statusKey: 112
 --- !u!1 &2011905989175535602
 GameObject:
   m_ObjectHideFlags: 0
@@ -7485,7 +7537,7 @@ Transform:
   m_GameObject: {fileID: 3860909703512727291}
   serializedVersion: 2
   m_LocalRotation: {x: 8.881806e-14, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.73, y: 0.67, z: 1.95}
+  m_LocalPosition: {x: 0.73, y: 0.6700001, z: 1.9500003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10329,6 +10381,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a7660c4127e7264c946f4aab0b21532, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarDoorManager
+  frontLeftDoorObject: {fileID: 0}
+  frontRightDoorObject: {fileID: 0}
+  bonnetObject: {fileID: 0}
+  trunkObject: {fileID: 0}
+  headlightObjects: []
+  rearlightObjects: []
 --- !u!1 &5666947270494420909
 GameObject:
   m_ObjectHideFlags: 0
@@ -11119,6 +11177,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6373610544642347784}
+  - component: {fileID: 1523895391100716382}
   m_Layer: 0
   m_Name: Bonnet
   m_TagString: Untagged
@@ -11145,6 +11204,46 @@ Transform:
   - {fileID: 6373610544914692621}
   m_Father: {fileID: 6373610545498333982}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1523895391100716382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6373610544642347785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4650ef1fa77addc4d9b2d4882f663c37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RotatingDoor
+  openAngle: -90
+  closeAngle: 0
+  rotationAxis: {x: 0, y: 0, z: 1}
+  animationDuration: 0.5
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &6373610544648453599
 GameObject:
   m_ObjectHideFlags: 0
@@ -11966,6 +12065,7 @@ GameObject:
   - component: {fileID: 6373610544806940609}
   - component: {fileID: 2482500920262819328}
   - component: {fileID: 5476807544752188683}
+  - component: {fileID: 3711863230456998724}
   m_Layer: 6
   m_Name: Door_Front_R
   m_TagString: Untagged
@@ -12024,6 +12124,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VehiclePartTarget
   area: 0
   part: 5
+--- !u!114 &3711863230456998724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6373610544806940610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4650ef1fa77addc4d9b2d4882f663c37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RotatingDoor
+  openAngle: -90
+  closeAngle: 0
+  rotationAxis: {x: 0, y: 1, z: 0}
+  animationDuration: 0.5
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &6373610544842160275
 GameObject:
   m_ObjectHideFlags: 0
@@ -13203,6 +13343,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6373610544944451387}
+  - component: {fileID: 8016273908134044429}
   m_Layer: 0
   m_Name: Trunk
   m_TagString: Untagged
@@ -13231,6 +13372,46 @@ Transform:
   - {fileID: 6373610544927840625}
   m_Father: {fileID: 6373610545498333982}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8016273908134044429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6373610544944451388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4650ef1fa77addc4d9b2d4882f663c37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RotatingDoor
+  openAngle: 90
+  closeAngle: 0
+  rotationAxis: {x: 0, y: 0, z: 1}
+  animationDuration: 0.5
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &6373610544946639494
 GameObject:
   m_ObjectHideFlags: 0
@@ -19148,6 +19329,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a7660c4127e7264c946f4aab0b21532, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarDoorManager
+  frontLeftDoorObject: {fileID: 0}
+  frontRightDoorObject: {fileID: 0}
+  bonnetObject: {fileID: 0}
+  trunkObject: {fileID: 0}
+  headlightObjects: []
+  rearlightObjects: []
 --- !u!1 &6373610546214057461
 GameObject:
   m_ObjectHideFlags: 0
@@ -19339,6 +19526,7 @@ GameObject:
   - component: {fileID: 6373610546245712136}
   - component: {fileID: 8007979429257819389}
   - component: {fileID: 5540635219324316902}
+  - component: {fileID: 8394566248984495375}
   m_Layer: 6
   m_Name: Door_Front_L
   m_TagString: Untagged
@@ -19397,6 +19585,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VehiclePartTarget
   area: 0
   part: 4
+--- !u!114 &8394566248984495375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6373610546245712137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4650ef1fa77addc4d9b2d4882f663c37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RotatingDoor
+  openAngle: 90
+  closeAngle: 0
+  rotationAxis: {x: 0, y: 1, z: 0}
+  animationDuration: 0.5
+  animationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &6373610546255802651
 GameObject:
   m_ObjectHideFlags: 0
